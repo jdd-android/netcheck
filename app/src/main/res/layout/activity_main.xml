@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btnGotoTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GOTO TEST" />
+
+    <Button
+        android:id="@+id/btnCheckNetwork"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="执行网络诊断" />
+
+    <EditText
+        android:id="@+id/etDomainUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="诊断地址"
+        android:text="www.baidu.com" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </ScrollView>
+
+</LinearLayout>
