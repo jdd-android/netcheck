@@ -1,8 +1,6 @@
 package com.cwvs.jdd.netcheck;
 
-import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-import com.cwvs.jdd.uitls.network.NetUtils;
+import com.cwvs.jdd.utils.network.NetUtils;
 import com.task.TraceTask;
 
 import jdd.cwvs.com.netcheck.R;

@@ -1,4 +1,4 @@
-package com.cwvs.jdd.uitls.network;
+package com.cwvs.jdd.utils.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -14,16 +14,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

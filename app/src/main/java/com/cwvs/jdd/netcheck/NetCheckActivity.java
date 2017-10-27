@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.cwvs.jdd.uitls.network.NetUtils;
+import com.cwvs.jdd.utils.network.NetPing;
+import com.cwvs.jdd.utils.network.NetRouteTracer;
+import com.cwvs.jdd.utils.network.NetUtils;
 
 import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
@@ -24,11 +26,13 @@ public class NetCheckActivity extends AppCompatActivity {
     private TextView mMsgTv;
     private EditText mDomainUrlEt;
 
+    private NetCheckActivity self;
     private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        self = this;
         setContentView(R.layout.activity_net_check);
         findViewById(R.id.btnCheckNetwork).setOnClickListener(mOnclickListener);
         mMsgTv = (TextView) findViewById(R.id.tvMsg);
@@ -40,23 +44,23 @@ public class NetCheckActivity extends AppCompatActivity {
     private void startCheck() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        String netWorkType = NetUtils.getNetWorkType(this);
-        String mobileOperator = NetUtils.getMobileOperator(this);
+        String netWorkType = NetUtils.getNetWorkType(self);
+        String mobileOperator = NetUtils.getMobileOperator(self);
 
         appenText("运营商：" + mobileOperator);
         appenText("网络类型：" + netWorkType);
 
-        NetUtils.getNetworkStrength(this, new NetUtils.NetworkStrengthListener() {
+        NetUtils.getNetworkStrength(self, new NetUtils.NetworkStrengthListener() {
             @Override
             public void onGetStrength(int dbm) {
                 appenText("当前连接网络强度：" + dbm + " dBm");
             }
         });
 
-        int wifiDbm = NetUtils.getWifiNetworkStrength(this);
+        int wifiDbm = NetUtils.getWifiNetworkStrength(self);
         appenText("WiFi网络强度：" + wifiDbm + " dBm");
 
-        NetUtils.getMobileNetworkStregth(this, new NetUtils.NetworkStrengthListener() {
+        NetUtils.getMobileNetworkStregth(self, new NetUtils.NetworkStrengthListener() {
             @Override
             public void onGetStrength(int dbm) {
                 appenText("手机网络强度：" + dbm + " dBm");
@@ -67,6 +71,7 @@ public class NetCheckActivity extends AppCompatActivity {
         executor.submit(new Runnable() {
             @Override
             public void run() {
+
                 // 获取本机 IP 地址
                 if (NetUtils.getNetWorkType(getApplicationContext()).equals(NetUtils.NETWORK_TYPE_WIFI)) {
                     String localIpByWifi = NetUtils.getLocalIpByWifi(getApplicationContext());
@@ -101,12 +106,25 @@ public class NetCheckActivity extends AppCompatActivity {
                 if (remoteInetAddress != null && remoteInetAddress.length > 0) {
                     InetAddress host = remoteInetAddress[0];
                     appenText("\nPing " + host.getHostAddress());
-                    String result = NetUtils.ping(host.getHostAddress(), 4, false);
+                    String result = NetPing.execPing(host.getHostAddress(), 4, false);
                     appenText(result);
                 } else {
-
                     appenText("\nparse domain ip err, can't exec ping task");
                 }
+
+                appenText("\n开始追踪路由...");
+                appenText(new NetRouteTracer().stringFromJni());
+                new NetRouteTracer().startTrace(url, new NetRouteTracer.TraceListener() {
+                    @Override
+                    public void onTraceUpdate(String log) {
+                        appenText(log);
+                    }
+
+                    @Override
+                    public void onTraceFinish() {
+
+                    }
+                });
 
             }
         });
