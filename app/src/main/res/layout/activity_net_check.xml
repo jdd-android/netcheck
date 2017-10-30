@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="诊断地址"
-        android:text="www.baidu.com" />
+        android:text="www.jdd.com" />
 
     <ScrollView
         android:layout_width="match_parent"

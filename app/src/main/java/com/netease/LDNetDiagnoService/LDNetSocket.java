@@ -41,7 +41,7 @@ public class LDNetSocket {
     }
 
     /**
-     * 通过connect函数测试TCP的RTT时延
+     * 通过 connect 函数测试 TCP 的 RTT 时延
      */
     public boolean exec(String host) {
         if (isCConn && loaded) {

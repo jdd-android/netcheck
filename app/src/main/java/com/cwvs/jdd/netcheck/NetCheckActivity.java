@@ -4,12 +4,14 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cwvs.jdd.utils.network.NetPing;
 import com.cwvs.jdd.utils.network.NetRouteTracer;
+import com.cwvs.jdd.utils.network.NetSocket;
 import com.cwvs.jdd.utils.network.NetUtils;
 
 import java.net.InetAddress;
@@ -113,19 +115,44 @@ public class NetCheckActivity extends AppCompatActivity {
                 }
 
                 appenText("\n开始追踪路由...");
-                appenText(new NetRouteTracer().stringFromJni());
-                new NetRouteTracer().startTrace(url, new NetRouteTracer.TraceListener() {
+                try {
+                    final StringBuilder stringBuilder = new StringBuilder();
+                    new NetRouteTracer().startTrace(url, new NetRouteTracer.TraceListener() {
+                        @Override
+                        public void onTraceUpdate(String log) {
+                            if (TextUtils.isEmpty(log)) {
+                                return;
+                            }
+                            if (log.contains("ms") || log.contains("***")) {
+                                stringBuilder.append(log);
+                                appenText(stringBuilder.toString());
+                                stringBuilder.delete(0, stringBuilder.length());
+                            } else {
+                                stringBuilder.append(log);
+                            }
+                        }
+
+                        @Override
+                        public void onTraceFinish() {
+
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                appenText("\nTCP 连接测试...");
+                new NetSocket().start(url, new NetSocket.NetSocketListener() {
                     @Override
-                    public void onTraceUpdate(String log) {
+                    public void onNetSocketFinished(String log) {
+
+                    }
+
+                    @Override
+                    public void onNetSocketUpdated(String log) {
                         appenText(log);
                     }
-
-                    @Override
-                    public void onTraceFinish() {
-
-                    }
                 });
-
             }
         });
 

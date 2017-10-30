@@ -174,7 +174,7 @@ public class LDNetDiagnoService extends
       _isSocketConnected = _netSocker.exec(_dormain);
 
       // 诊断ping信息, 同步过程
-      if ((_isNetConnected && _isDomainParseOk && _isSocketConnected)) {// 联网&&DNS解析成功&&connect测试成功
+      if (!(_isNetConnected && _isDomainParseOk && _isSocketConnected)) {// 联网&&DNS解析成功&&connect测试成功
         recordStepInfo("\n开始ping...");
         _netPinger = new LDNetPing(this, 4);
         recordStepInfo("ping...127.0.0.1");
@@ -200,11 +200,18 @@ public class LDNetDiagnoService extends
       }
 
       // 开始诊断traceRoute
+      long startTime = System.currentTimeMillis();
       recordStepInfo("\n开始traceroute...");
       _traceRouter = LDNetTraceRoute.getInstance();
       _traceRouter.initListenter(this);
       _traceRouter.isCTrace = this._isUseJNICTrace;
       _traceRouter.startTraceRoute(_dormain);
+      recordStepInfo("cost time " + (System.currentTimeMillis() - startTime) + " ms");
+
+      recordStepInfo("\n开始traceroute JAVA...");
+      startTime = System.currentTimeMillis();
+      _traceRouter.startTraceRouteJava(_dormain);
+      recordStepInfo("cost time " + (System.currentTimeMillis() - startTime) + " ms");
       return _logInfo.toString();
     } else {
       recordStepInfo("\n\n当前主机未联网,请检查网络！");

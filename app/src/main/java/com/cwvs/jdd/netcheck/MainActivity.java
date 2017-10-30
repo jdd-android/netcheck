@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("NetWork", "手机网络强度：" + dbm);
             }
         });
-
-
     }
 
     private View.OnClickListener mOnclickListener = new View.OnClickListener() {

@@ -186,7 +186,7 @@ public abstract class LDNetAsyncTaskEx<Params, Progress, Result> {
 
     protected final void publishProgress(Progress... values) {
 	sHandler.obtainMessage(MESSAGE_POST_PROGRESS,
-		new LDNetAsyncTaskResult<Progress>(this, values)).sendToTarget();
+		new LDNetAsyncTaskResult<>(this, values)).sendToTarget();
     }
 
     protected void finish(Result result) {
