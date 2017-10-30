@@ -37,7 +37,7 @@ public class NativeInterface {
         this.mTraceListener = traceListener;
     }
 
-    public void setNetSocketListenr(NetSocket.NetSocketListener netSocketListenr) {
+    void setNetSocketListenr(NetSocket.NetSocketListener netSocketListenr) {
         this.mNetSocketListenr = netSocketListenr;
     }
 

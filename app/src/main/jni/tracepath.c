@@ -158,7 +158,7 @@ void data_wait(int fd) {
  */
 void print_host(const char *a, const char *b, int both) {
     int plen;
-    plen = printf("%s", a);
+    plen = printf("%s,", a);
     if (both)
         plen += printf(" (%s)", b);
     if (plen >= HOST_COLUMN_SIZE)
@@ -244,7 +244,7 @@ int recverr(int fd, int ttl) {
         return 0;
     }
     if (e->ee_origin == SO_EE_ORIGIN_LOCAL) {
-        printf("%2d?: %*s ", ttl, -(HOST_COLUMN_SIZE - 1), "[LOCALHOST]");
+        printf("%2d?,%*s,", ttl, -(HOST_COLUMN_SIZE - 1), "[LOCALHOST]");
     } else if (e->ee_origin == SO_EE_ORIGIN_ICMP) {
         char abuf[128];
         struct sockaddr_in *sin = (struct sockaddr_in *) (e + 1);
@@ -254,9 +254,9 @@ int recverr(int fd, int ttl) {
         inet_ntop(AF_INET, &sin->sin_addr, abuf, sizeof(abuf));
 
         if (sndhops > 0)
-            printf("%2d:  ", sndhops);
+            printf("%2d,", sndhops);
         else
-            printf("%2d?: ", ttl);
+            printf("%2d?,", ttl);
 
         if (!no_resolve || show_both) {
             fflush(stdout);
@@ -542,7 +542,7 @@ mainTracePath(int argc, char **argv) {
                 return 0;
             } else {
                 timeoutTTL++;
-                printf("%2d:  **********", ttl);
+                printf("%2d,**********,", ttl);
             }
         }
     }
