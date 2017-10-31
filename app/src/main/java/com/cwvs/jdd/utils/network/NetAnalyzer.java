@@ -345,6 +345,13 @@ public class NetAnalyzer {
 
                 @Override
                 public void onFinish(String result) {
+                    // Ping result 解析规则
+
+                    // 末尾带 DUP! 的数据需要丢弃，这是在 linux 平台会出现的一个数据包返回多个数据包的现象
+                    // 64 bytes from 153.101.56.251: icmp_seq=4 ttl=56 time=13 ms (DUP!)
+
+                    //  64 bytes from 181.138.212.118.adsl-pool.jx.chinaunicom.com (118.212.138.181): icmp_seq=1 ttl=52 time=39.3 ms
+
                     getListener().onModuleAnalyseFinish(Module.PING, result);
                 }
             });
