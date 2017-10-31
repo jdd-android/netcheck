@@ -51,14 +51,26 @@ public class NativeInterface {
     public native void startJNITelnet(String host, String port);
 
     /**
-     * 由 JNI 模块调用，回调 trace 信息
+     * 由 JNI 模块调用，回调 trace 信息。不可随意更改本函数签名。
      *
      * @param log 信息
      */
-    public void printTraceInfo(String log) {
+    public void onTraceUpdate(String log) {
         Log.e(TAG, log);
         if (mTraceListener != null) {
             mTraceListener.onTraceUpdate(log);
+        }
+    }
+
+    /**
+     * 由 JNI 模块调用，当路由追踪结束时被回调。不可随意更改本函数签名
+     *
+     * @param log 信息
+     */
+    public void onTraceFinish(String log) {
+        Log.e(TAG, log);
+        if (mTraceListener != null) {
+            mTraceListener.onTraceFinish();
         }
     }
 

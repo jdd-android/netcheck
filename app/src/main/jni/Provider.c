@@ -1,7 +1,9 @@
 #include "Provider.h"
 
 //
-//主要用于TracePath信息的输出
+// 将 Trace 信息回调给 Java 层；
+// printTraceInfo -> NativeInterface.onTraceUpdate(String msg);
+// printTraceFinish -> NativeInterface.onTraceFinish(String msg);
 //
 
 extern int isFirst;
@@ -9,6 +11,7 @@ JavaVM *gJvm;
 jclass TestProvider;
 jobject mTestProvider;
 jmethodID printTraceInfo;
+jmethodID printTraceFinish;
 
 /**
  * 初始化 类、对象、方法
@@ -47,9 +50,17 @@ int InitProvider(JNIEnv *jniEnv) {
     }
 
     if (printTraceInfo == NULL) {
-        printTraceInfo = (*jniEnv)->GetMethodID(jniEnv, TestProvider, "printTraceInfo",
+        printTraceInfo = (*jniEnv)->GetMethodID(jniEnv, TestProvider, "onTraceUpdate",
                                                 "(Ljava/lang/String;)V");
         if (printTraceInfo == NULL) {
+            (*jniEnv)->DeleteLocalRef(jniEnv, TestProvider);
+            (*jniEnv)->DeleteLocalRef(jniEnv, mTestProvider);
+            return -2;
+        }
+
+        printTraceFinish = (*jniEnv)->GetMethodID(jniEnv, TestProvider, "onTraceFinish",
+                                                  "(Ljava/lang/String;)V");
+        if (printTraceFinish == NULL) {
             (*jniEnv)->DeleteLocalRef(jniEnv, TestProvider);
             (*jniEnv)->DeleteLocalRef(jniEnv, mTestProvider);
             return -2;
@@ -62,9 +73,9 @@ int InitProvider(JNIEnv *jniEnv) {
 }
 
 /**
- * SayHello ---- 调用 Java 方法
+ * callbackTraceInfo2Java ---- 调用 Java 方法 NativeInterface.onTraceUpdate
  */
-void PrintTraceInfo(const char *aStrToPrint) {
+void callbackTraceInfo2Java(const char *aStrToPrint) {
     //获取当前线程的jniEnv
     JNIEnv *jniEnv;
     (*gJvm)->GetEnv(gJvm, (void **) &jniEnv, JNI_VERSION_1_6);
@@ -87,16 +98,46 @@ void PrintTraceInfo(const char *aStrToPrint) {
     if (mTestProvider != NULL && printTraceInfo != NULL) {
         jstring jstrMSG = NULL;
         jstrMSG = (*jniEnv)->NewStringUTF(jniEnv, aStrToPrint);
-        __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "call java printTrackInfo begin....");
         (*jniEnv)->CallVoidMethod(jniEnv, mTestProvider, printTraceInfo, jstrMSG);
-        __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "call java printTrackInfo after....");
+        (*jniEnv)->DeleteLocalRef(jniEnv, jstrMSG);
+    }
+}
+
+/**
+ * callbackTraceFinish2Java ---- 调用 Java 方法 NativeInterface.onTraceFinish
+ */
+void callbackTraceFinish2Java(const char *aStrToPrint) {
+    //获取当前线程的jniEnv
+    JNIEnv *jniEnv;
+    (*gJvm)->GetEnv(gJvm, (void **) &jniEnv, JNI_VERSION_1_6);
+    if (jniEnv == NULL) {
+        __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "get jniEnv from currentThread null....");
+        return;
+    }
+
+    if (isFirst == 1) {
+        TestProvider = NULL;
+        mTestProvider = NULL;
+        printTraceFinish = NULL;
+        __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "init the provider info....");
+        int result = InitProvider(jniEnv);
+        if (result != 1) {
+            return;
+        }
+    }
+
+    if (mTestProvider != NULL && printTraceFinish != NULL) {
+        jstring jstrMSG = NULL;
+        jstrMSG = (*jniEnv)->NewStringUTF(jniEnv, aStrToPrint);
+        (*jniEnv)->CallVoidMethod(jniEnv, mTestProvider, printTraceFinish, jstrMSG);
         (*jniEnv)->DeleteLocalRef(jniEnv, jstrMSG);
     }
 }
 
 
 //
-//主要用于TracePath信息的输出
+// 将 Tcp 连接测试信息回调给 Java 层；
+// printSocketInfo -> NativeInterface.printSocketInfo(String msg);
 //
 
 extern int isFirstTelnet;

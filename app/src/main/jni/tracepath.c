@@ -48,18 +48,16 @@ char *jstringTostring(JNIEnv *env, jstring jstr);
 
 JNIEXPORT void JNICALL
 Java_com_cwvs_jdd_utils_network_NativeInterface_startJNICTraceRoute(JNIEnv *env, jobject obj,
-                                                                   jstring command) {
-    __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "===============begin=====================");
+                                                                    jstring command) {
+    __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "begin trace route...");
     (*env)->GetJavaVM(env, &gJvm);
     (*gJvm)->AttachCurrentThread(gJvm, &env, NULL);
-
     isFirst = 1;
-    __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "startTraceCJNI c_command begin....");
     char *c_command = jstringTostring(env, command);
-    __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "startTraceCJNI c_command end....");
     char *argv[] = {"tracepath", c_command};
     mainTracePath(2, argv);
-    __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "===============end=====================");
+    callbackTraceFinish2Java("trace finish");
+    __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "end trace route...");
 }
 
 /**
@@ -93,11 +91,11 @@ int printf(const char *fmt, ...) {
     memset(buffer, OUT_LEN, 0);
     cnt = vsnprintf(buffer, OUT_LEN, fmt, argptr);
     buffer[cnt] = '\0';
+
     pthread_mutex_lock(&mutex);
-    //__android_log_print(ANDROID_LOG_INFO, "JNIMsg", "print lock:>>>>>>%d", mutex);
-    PrintTraceInfo(buffer);
+    callbackTraceInfo2Java(buffer);
     pthread_mutex_unlock(&mutex);
-    //__android_log_print(ANDROID_LOG_INFO, "JNIMsg", "print unlock>>>>>>%d", mutex);
+
     free(buffer);
     va_end(argptr);
     isFirst++;
