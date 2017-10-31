@@ -17,7 +17,7 @@ public class NetPing {
     private static final String MATCH_PING_IP = "(?<=from ).*(?=: icmp_seq=1 ttl=)";
     private static final String MATCH_PING_HOST_IP = "(?<=\\().*?(?=\\))";
 
-    public static String execPing(String host, int sendCount, boolean isNeedL) {
+    public static String execPing(String host, int sendCount, boolean isNeedL, PingListener listener) {
         String execHost = host;
 
         Pattern p = Pattern.compile(MATCH_PING_HOST_IP);
@@ -36,7 +36,10 @@ public class NetPing {
             String line;
             while ((line = reader.readLine()) != null) {
                 pingStatusBuilder.append(line).append("\n");
-                Log.e("Ping", "Line: " + line);
+                if (listener != null) {
+                    listener.onProgress(line);
+                }
+                Log.d("Ping", "Line: " + line);
             }
             process.waitFor();
         } catch (Exception e) {
@@ -55,7 +58,9 @@ public class NetPing {
         }
 
         String pingStatus = pingStatusBuilder.toString();
-        Log.e("Ping", pingStatus);
+        if (listener != null) {
+            listener.onFinish(pingStatus);
+        }
         boolean pingOk = Pattern.compile(MATCH_PING_IP).matcher(pingStatus).find();
         if (pingOk) {
             return pingStatus;
@@ -68,9 +73,9 @@ public class NetPing {
     }
 
     public interface PingListener {
-        void onStart(String host);
+        void onProgress(String progress);
 
-        void onProgress();
+        void onFinish(String result);
     }
 
     public static class PingStatus {
