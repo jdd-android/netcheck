@@ -23,7 +23,7 @@ int InitProvider(JNIEnv *jniEnv) {
     }
 
     if (TestProvider == NULL) {
-        TestProvider = (*jniEnv)->FindClass(jniEnv, "com/cwvs/jdd/utils/network/NativeInterface");
+        TestProvider = (*jniEnv)->FindClass(jniEnv, "com/cwvs/jdd/network/NativeInterface");
         if (TestProvider == NULL) {
             return -1;
         }
@@ -32,7 +32,7 @@ int InitProvider(JNIEnv *jniEnv) {
 
     if (mTestProvider == NULL) {
         jfieldID fid = (*jniEnv)->GetStaticFieldID(jniEnv, TestProvider, "instance",
-                                                   "Lcom/cwvs/jdd/utils/network/NativeInterface;");
+                                                   "Lcom/cwvs/jdd/network/NativeInterface;");
         if (fid == NULL) {
             __android_log_print(ANDROID_LOG_INFO, "JNIMsg",
                                 "InitProvider Begin get static object id error");
@@ -155,7 +155,7 @@ int InitSocketInfo(JNIEnv *jniEnvTelnet) {
 
     if (_LDNetSocket == NULL) {
         _LDNetSocket = (*jniEnvTelnet)->FindClass(jniEnvTelnet,
-                                                  "com/cwvs/jdd/utils/network/NativeInterface");
+                                                  "com/cwvs/jdd/network/NativeInterface");
         if (_LDNetSocket == NULL) {
             return -1;
         }
@@ -164,7 +164,7 @@ int InitSocketInfo(JNIEnv *jniEnvTelnet) {
 
     if (_mLDNetSocket == NULL) {
         jfieldID fid = (*jniEnvTelnet)->GetStaticFieldID(jniEnvTelnet, _LDNetSocket, "instance",
-                                                         "Lcom/cwvs/jdd/utils/network/NativeInterface;");
+                                                         "Lcom/cwvs/jdd/network/NativeInterface;");
         if (fid == NULL) {
             __android_log_print(ANDROID_LOG_INFO, "JNIMsg",
                                 "InitProvider Begin get static object id error");

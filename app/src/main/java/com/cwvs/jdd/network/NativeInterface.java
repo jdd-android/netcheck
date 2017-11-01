@@ -1,6 +1,9 @@
-package com.cwvs.jdd.utils.network;
+package com.cwvs.jdd.network;
 
 import android.util.Log;
+
+import com.cwvs.jdd.network.analyse.NetRouteTracer;
+import com.cwvs.jdd.network.analyse.NetSocket;
 
 /**
  * @author liuchao on 2017/10/30.
@@ -33,11 +36,11 @@ public class NativeInterface {
         mLibLoaded = true;
     }
 
-    void setTraceListener(NetRouteTracer.TraceListener traceListener) {
+    public void setTraceListener(NetRouteTracer.TraceListener traceListener) {
         this.mTraceListener = traceListener;
     }
 
-    void setNetSocketListenr(NetSocket.NetSocketListener netSocketListenr) {
+    public void setNetSocketListenr(NetSocket.NetSocketListener netSocketListenr) {
         this.mNetSocketListenr = netSocketListenr;
     }
 

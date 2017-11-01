@@ -1,6 +1,5 @@
 package com.cwvs.jdd.netcheck;
 
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -9,8 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.cwvs.jdd.utils.network.NetAnalyzer;
-import com.cwvs.jdd.utils.network.NetUtils;
+import com.cwvs.jdd.network.analyse.NetAnalyzer;
+import com.cwvs.jdd.network.analyse.NetUtils;
 
 import java.net.InetAddress;
 

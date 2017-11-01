@@ -1,4 +1,6 @@
-package com.cwvs.jdd.utils.network;
+package com.cwvs.jdd.network.analyse;
+
+import com.cwvs.jdd.network.NativeInterface;
 
 /**
  * @author liuchao on 2017/10/27.

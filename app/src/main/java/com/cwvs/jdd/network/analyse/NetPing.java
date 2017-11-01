@@ -1,4 +1,4 @@
-package com.cwvs.jdd.utils.network;
+package com.cwvs.jdd.network.analyse;
 
 import android.text.TextUtils;
 import android.util.Log;

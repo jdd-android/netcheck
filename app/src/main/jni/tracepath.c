@@ -47,7 +47,7 @@ int isFirst;
 char *jstringTostring(JNIEnv *env, jstring jstr);
 
 JNIEXPORT void JNICALL
-Java_com_cwvs_jdd_utils_network_NativeInterface_startJNICTraceRoute(JNIEnv *env, jobject obj,
+Java_com_cwvs_jdd_network_NativeInterface_startJNICTraceRoute(JNIEnv *env, jobject obj,
                                                                     jstring command) {
     __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "begin trace route...");
     (*env)->GetJavaVM(env, &gJvm);
@@ -475,6 +475,12 @@ mainTracePath(int argc, char **argv) {
     if (he == NULL) {
         printf("gethostbyname: cant get host from hostname");
         return -1;
+    } else {
+//        char **pptr = he->h_addr_list;
+//        char str[32];
+//        /* 将刚才得到的所有地址都打出来。其中调用了inet_ntop()函数 */
+//        for (; *pptr != NULL; pptr++)
+//            printf(" address:%s\n", inet_ntop(he->h_addrtype, *pptr, str, sizeof(str)));
     }
 
 #ifdef USE_IDN

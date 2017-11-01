@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-import com.cwvs.jdd.utils.network.NetUtils;
+import com.cwvs.jdd.network.analyse.NetUtils;
 import com.task.TraceTask;
 
 import jdd.cwvs.com.netcheck.R;

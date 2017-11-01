@@ -22,7 +22,7 @@ pthread_mutex_t mutexTel = PTHREAD_MUTEX_INITIALIZER;
 int isFirstTelnet;
 extern char* jstringTostring(JNIEnv* env, jstring jstr);
 int Lprintf(const char *fmt, ...);
-JNIEXPORT void JNICALL Java_com_cwvs_jdd_utils_network_NativeInterface_startJNITelnet(JNIEnv *env, jobject obj, jstring command, jstring port){
+JNIEXPORT void JNICALL Java_com_cwvs_jdd_network_NativeInterface_startJNITelnet(JNIEnv *env, jobject obj, jstring command, jstring port){
 	__android_log_print(ANDROID_LOG_INFO, "JNIMsg", "startJNITelnet begin...." );
 	(*env)->GetJavaVM(env, &gTelnetJvm);
 	(*gTelnetJvm)->AttachCurrentThread(gTelnetJvm, &env, NULL);
