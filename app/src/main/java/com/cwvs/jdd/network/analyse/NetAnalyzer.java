@@ -28,6 +28,32 @@ public class NetAnalyzer {
 
     private static final String TAG = NetAnalyzer.class.getSimpleName();
 
+    private volatile static NetAnalyzer instance = null;
+    private ThreadPoolExecutor executor;
+
+    private NetAnalyzer() {
+    }
+
+    public static NetAnalyzer getInstance() {
+        if (instance == null) {
+            synchronized (NetAnalyzer.class) {
+                instance = new NetAnalyzer();
+                instance.executor = new ThreadPoolExecutor(
+                        1,
+                        1,
+                        3,
+                        TimeUnit.SECONDS,
+                        new LinkedBlockingQueue<Runnable>(20),
+                        new AnalyzerThreadFactory());
+            }
+        }
+        return instance;
+    }
+
+    public void clearTaskQueue() {
+        executor.getQueue().clear();
+    }
+
     /**
      * 开始诊断网络。
      *
@@ -37,13 +63,13 @@ public class NetAnalyzer {
      * @param modules  需要诊断的模块，诊断的顺序与参数传递顺序一致。
      */
     public void analyse(Context context, String url, Listener listener, Module... modules) {
-        ExecutorService executor = new ThreadPoolExecutor(
-                1,
-                1,
-                3,
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(12),
-                new AnalyzerThreadFactory());
+//        ExecutorService executor = new ThreadPoolExecutor(
+//                1,
+//                1,
+//                3,
+//                TimeUnit.SECONDS,
+//                new LinkedBlockingQueue<Runnable>(12),
+//                new AnalyzerThreadFactory());
 
         listener.onAnalyseStart();
         if (modules == null || modules.length == 0) {
@@ -413,7 +439,7 @@ public class NetAnalyzer {
         }
     }
 
-    private class AnalyzerThreadFactory implements ThreadFactory {
+    private static class AnalyzerThreadFactory implements ThreadFactory {
         @Override
         public Thread newThread(@NonNull Runnable r) {
             return new Thread(r, "NetAnalyzerWorker");

@@ -110,7 +110,8 @@ public class NetCheckActivity extends AppCompatActivity {
             }
         };
 
-        new NetAnalyzer().analyse(this, mDomainUrlEt.getText().toString(), analyzerListener,
+        NetAnalyzer.getInstance().clearTaskQueue();
+        NetAnalyzer.getInstance().analyse(this, mDomainUrlEt.getText().toString(), analyzerListener,
                 NetAnalyzer.Module.ISP,
                 NetAnalyzer.Module.NET_TYPE,
                 NetAnalyzer.Module.NET_SIGNAL_STRENGTH,
