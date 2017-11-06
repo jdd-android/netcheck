@@ -180,7 +180,7 @@ public class NetUtils {
         if (netWorkType.equals(NETWORK_TYPE_WIFI)) {
             listener.onGetStrength(getWifiNetworkStrength(context));
         } else {
-            getMobileNetworkStregth(context, listener);
+            getMobileNetworkStrength(context, listener);
         }
     }
 
@@ -203,7 +203,7 @@ public class NetUtils {
      * @param context  {@link Context}
      * @param listener 信号强度回调
      */
-    public static void getMobileNetworkStregth(Context context, final NetworkStrengthListener listener) {
+    public static void getMobileNetworkStrength(Context context, final NetworkStrengthListener listener) {
         final Context appContext = context.getApplicationContext();
         final TelephonyManager telephonyManager = (TelephonyManager) appContext
                 .getSystemService(Context.TELEPHONY_SERVICE);
@@ -239,7 +239,7 @@ public class NetUtils {
      * 手机网络强度监听器；
      * 由于获取手机网络强度时异步方法，因此创建此监听器获取信号强度。
      *
-     * @see #getMobileNetworkStregth(Context, NetworkStrengthListener)
+     * @see #getMobileNetworkStrength(Context, NetworkStrengthListener)
      */
     public interface NetworkStrengthListener {
         /**

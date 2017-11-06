@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
         int wifiDbm = NetUtils.getWifiNetworkStrength(this);
         Log.e("NetWork", "wifi dbm：" + wifiDbm);
-        NetUtils.getMobileNetworkStregth(this, new NetUtils.NetworkStrengthListener() {
+        NetUtils.getMobileNetworkStrength(this, new NetUtils.NetworkStrengthListener() {
             @Override
             public void onGetStrength(int dbm) {
                 Log.e("NetWork", "手机网络强度：" + dbm);

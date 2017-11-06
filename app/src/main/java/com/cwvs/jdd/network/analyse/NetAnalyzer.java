@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 
 import org.json.JSONObject;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -262,7 +261,7 @@ public class NetAnalyzer {
             new Handler(handlerThread.getLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    NetUtils.getMobileNetworkStregth(getContext(), new NetUtils.NetworkStrengthListener() {
+                    NetUtils.getMobileNetworkStrength(getContext(), new NetUtils.NetworkStrengthListener() {
                         @Override
                         public void onGetStrength(int dbm) {
                             // 如果需要锁定线程，释放线程锁，让线程继续执行
@@ -391,7 +390,7 @@ public class NetAnalyzer {
         @Override
         public void run() {
             getListener().onModuleAnalyseStart(Module.TRACE_ROUTE);
-            new NetRouteTracer().startTrace(getUrl(), new NetRouteTracer.TraceListener() {
+            new NetRouteTracer().startTrace("221.230.141.104", new NetRouteTracer.TraceListener() {
                 @Override
                 public void onTraceUpdate(String log) {
                     getListener().onModuleAnalyseUpdate(Module.TRACE_ROUTE, log);

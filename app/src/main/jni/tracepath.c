@@ -48,7 +48,7 @@ char *jstringTostring(JNIEnv *env, jstring jstr);
 
 JNIEXPORT void JNICALL
 Java_com_cwvs_jdd_network_NativeInterface_startJNICTraceRoute(JNIEnv *env, jobject obj,
-                                                                    jstring command) {
+                                                              jstring command) {
     __android_log_print(ANDROID_LOG_INFO, "JNIMsg", "begin trace route...");
     (*env)->GetJavaVM(env, &gJvm);
     (*gJvm)->AttachCurrentThread(gJvm, &env, NULL);
@@ -392,7 +392,7 @@ static int usage(void) {
  */
 int
 mainTracePath(int argc, char **argv) {
-    struct hostent *he;
+//    struct hostent *he;
     int fd;
     int on;
     int ttl;
@@ -471,23 +471,34 @@ mainTracePath(int argc, char **argv) {
     }
 #endif
 
-    he = gethostbyname(p);
-    if (he == NULL) {
-        printf("gethostbyname: cant get host from hostname");
+    // 若成功则为1，若输入不是有效的表达式则为0，若出错则为-1
+    int pton = inet_pton(AF_INET, p, &target.sin_addr);
+    if (pton == 0) {
+        printf("invalid ip: %s", p);
         return -1;
-    } else {
+    }
+    if (pton == -1) {
+        printf("parse ip failed: %s", p);
+        return -1;
+    }
+
+//    he = gethostbyname(p);
+//    if (he == NULL) {
+//        printf("gethostbyname: cant get host from hostname");
+//        return -1;
+//    } else {
 //        char **pptr = he->h_addr_list;
 //        char str[32];
 //        /* 将刚才得到的所有地址都打出来。其中调用了inet_ntop()函数 */
 //        for (; *pptr != NULL; pptr++)
 //            printf(" address:%s\n", inet_ntop(he->h_addrtype, *pptr, str, sizeof(str)));
-    }
+//    }
 
 #ifdef USE_IDN
     free(p);
 #endif
 
-    memcpy(&target.sin_addr, he->h_addr, 4);
+//    memcpy(&target.sin_addr, he->h_addr, 4);
 
     on = IP_PMTUDISC_PROBE;
     if (setsockopt(fd, SOL_IP, IP_MTU_DISCOVER, &on, sizeof(on)) &&
